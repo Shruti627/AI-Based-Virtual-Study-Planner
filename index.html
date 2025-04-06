@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background-color: beige;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .nav1 {
+      height: 100px;
+      width: 100%;
+      background-color: burlywood;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container-wrapper {
+      margin-top: 250px; 
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .con {
+      background-color: burlywood;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .con input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .con button {
+      background-color: rgb(108, 49, 49);
+      color: white;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .con button:hover {
+      background-color: rgb(185, 79, 79);
+    }
+
+    .con p {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .con a {
+      color: brown;
+      text-decoration: none;
+    }
+
+    .con a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav1">
+    <h1>AI Based Virtual Study Planner</h1>
+  </div>
+
+  <div class="container-wrapper">
+    <div class="con">
+      <h1>Login Form</h1>
+      <form id="loginForm">
+        <input type="text" name="username" id="username" placeholder="Username or Email" required><br>
+        <input type="password" name="password" id="password" placeholder="Password" required><br><br>
+        <button type="submit">Log in</button>
+      </form>
+      <p>Don't have an account?</p>
+      <a href="signup.html">Sign up</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      localStorage.setItem("loggedIn", "true");
+      window.location.href = "profile.html";
+    });
+  </script>
+</body>
+</html>

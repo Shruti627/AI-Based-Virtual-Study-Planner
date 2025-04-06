@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>AI Task Roadmap</title>
+  <style>
+    body {
+      background-color: beige;
+      color: #5a4a3b;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      color: #8b7355;
+      text-align: center;
+      margin-top: 50px;
+      font-size: 2rem;
+    }
+
+    #input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    input {
+      width: 40%;
+      height: 50px;
+      font-size: 20px;
+      padding-left: 10px;
+      border: none;
+      border-radius: 5px;
+      margin: 20px 0;
+      text-align: center;
+      background-color: burlywood;
+      color: black;
+    }
+
+    button {
+      width: 30%;
+      height: 50px;
+      font-size: 20px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    #generate-btn {
+      background-color:rgb(204, 155, 92);
+      color: black;
+    }
+
+    #generate-btn:hover {
+      background-color: #d2b48c;
+    }
+
+    .back-btn {
+      background-color: #8b7355;
+      color: aqua;
+      display: block;
+      width: 150px;
+      text-align: center;
+      text-decoration: none;
+      padding: 15px;
+      margin: 30px auto;
+      border-radius: 5px;
+    }
+
+    .back-btn:hover {
+      background-color: rgb(191, 107, 107);
+    }
+
+    ol {
+      width: 50%;
+      margin: 20px auto;
+      padding: 0;
+      list-style: none;
+      counter-reset: task-counter;
+    }
+
+    li {
+      padding: 12px;
+      margin: 8px 0;
+      background: #faebd7;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      counter-increment: task-counter;
+      color: black;
+    }
+
+    li::before {
+      content: counter(task-counter) ". ";
+      font-weight: bold;
+      color: black;
+    }
+
+  </style>
+</head>
+<body>
+  <h2>AI Task Roadmap</h2>
+
+  <div id="input-container">
+    <input id="aiInput" type="text" placeholder="Enter a prompt..." />
+    <button id="generate-btn" onclick="generateAITasks()">Generate Roadmap</button>
+  </div>
+
+  <ol id="aiList"></ol>
+
+  <script>
+    const aiInput = document.getElementById("aiInput");
+    const aiList = document.getElementById("aiList");
+
+    async function generateAITasks() {
+      if (aiInput.value.trim() === "") return;
+      aiList.innerHTML = "Loading...";
+      const taskObj = JSON.parse(await groq(aiInput.value));
+      aiList.innerHTML = "";
+      taskObj.tasks.forEach(task => {
+        aiList.appendChild(createTaskTag(task));
+      });
+    }
+
+    function createTaskTag(taskName) {
+      const newLi = document.createElement("li");
+      newLi.innerText = taskName;
+      return newLi;
+    }
+
+    async function groq(prompt) {
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer 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",
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          response_format: { type: "json_object" },
+          messages: [
+            {
+              role: "user",
+              content: prompt + " give me an array of tasks in JSON format as { 'tasks': ['task1', 'task2'] } in a proper roadmap order.",
+            },
+          ],
+        }),
+      });
+
+      const body = await response.json();
+      return body.choices[0].message.content;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Task Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: beige;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 1.8em;
+            color: #333;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            font-size: 1.1em;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 15px;
+            transition: border 0.3s ease-in-out;
+        }
+
+        input:focus {
+            border-color: gray;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background-color: burlywood;
+            color: black;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: rgb(232, 199, 157);
+            transform: scale(1.05);
+        }
+
+        .task-card {
+            margin-top: 20px;
+            padding: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            background: bisque;
+            border-radius: 10px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            min-height: 80px;
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Task Generator</h1>
+        <p>Enter available time (in minutes) to get a task suggestion.</p>
+        <input type="number" id="timeInput" placeholder="Enter time in minutes">
+        <button onclick="suggestTask()">Get Task</button>
+        <div id="taskOutput" class="task-card"></div>
+    </div>
+
+    <script>
+        async function suggestTask() {
+            const time = document.getElementById("timeInput").value;
+            const output = document.getElementById("taskOutput");
+
+            if (!time || time <= 0) {
+                output.innerHTML = "<strong>Error:</strong> Please enter a valid time!";
+                output.style.background = "#ff4d4d";
+                return;
+            }
+
+            const apiKey = "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";
+            const apiUrl = "https://api.groq.com/openai/v1/chat/completions";
+
+            const requestBody = {
+                model: "llama3-8b-8192",
+                messages: [
+                    { role: "system", content: "You are an intelligent task assistant that suggests unique, creative tasks based on the given time." },
+                    { role: "user", content: `Suggest a productive task that can be completed in ${time} minutes. Keep it within 5 lines.` }
+                ],
+                max_tokens: 100,
+                temperature: 0.9,
+                top_p: 0.95
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.choices && data.choices.length > 0) {
+                    output.innerHTML = `<strong>Task:</strong><br>${data.choices[0].message.content.trim()}`;
+                    output.style.background = getRandomColor();
+                } else {
+                    output.innerHTML = "<strong>Error:</strong> Invalid response from AI.";
+                    output.style.background = "#ff4d4d";
+                }
+            } catch (error) {
+                output.innerHTML = "<strong>Error:</strong> Failed to fetch task.";
+                output.style.background = "#ff4d4d";
+            }
+        }
+
+        function getRandomColor() {
+            const colors = [
+                "linear-gradient(135deg, #ff7eb3, #ff758c)",
+                "linear-gradient(135deg, #43cea2, #185a9d)",
+                "linear-gradient(135deg, #ff9966, #ff5e62)",
+                "linear-gradient(135deg, #6a11cb, #2575fc)",
+                "linear-gradient(135deg, #f83600, #fe8c00)"
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: beige;
+        }
+        .sidebar {
+            width: 220px;
+            background: burlywood;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .sidebar h2 {
+            font-size: 20px;
+        }
+        .main {
+            flex-grow: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .task-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .task-inputs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        input, select {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+        button {
+            padding: 12px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .task-list {
+            margin-top: 20px;
+        }
+        .task {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+        .low {
+            background: #E1C699;
+        }
+        .medium {
+            background: #B07D62;
+        }
+        .high {
+            background: #5D4037;
+        }
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+            background: #95a5a6 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>📋 To-Do List</h2>
+        <button onclick="location.href='profile.html'">⬅️ BACK</button>
+    </div>
+    <div class="main">
+        <div class="task-container">
+            <h2>📝 Manage Tasks</h2>
+            <div class="task-inputs">
+                <input type="text" id="taskInput" placeholder="Enter task...">
+                <input type="date" id="dueDate">
+                <input type="time" id="dueTime">
+                <select id="priority">
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                </select>
+            </div>
+            <button onclick="addTask()">Add Task</button>
+            <div id="taskList" class="task-list"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            renderTasks();
+            Notification.requestPermission();
+            setInterval(() => {
+                checkTaskReminders();
+                autoMarkCompleted();
+            }, 60000);
+        });
+
+        function addTask() {
+            const taskInput = document.getElementById("taskInput").value.trim();
+            const dueDate = document.getElementById("dueDate").value;
+            const dueTime = document.getElementById("dueTime").value;
+            const priority = document.getElementById("priority").value;
+            if (!taskInput) {
+                alert("Enter a task!");
+                return;
+            }
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.push({ text: taskInput, dueDate, dueTime, priority, completed: false });
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            document.getElementById("taskInput").value = "";
+            renderTasks();
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.forEach((task, index) => {
+                const div = document.createElement("div");
+                div.className = `task ${task.priority} ${task.completed ? "completed" : ""}`;
+                div.innerHTML = `
+                    <input type="checkbox" ${task.completed ? "checked" : ""} onclick="toggleTaskCompletion(${index})">
+                    <span>${task.text} - Due: ${task.dueDate || "No date"} ${task.dueTime ? "at " + task.dueTime : ""}</span>
+                    <div>
+                        <button onclick="editTask(${index})">✏️</button>
+                        <button onclick="deleteTask(${index})">❌</button>
+                    </div>
+                `;
+                taskList.appendChild(div);
+            });
+        }
+
+        function toggleTaskCompletion(index) {
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks[index].completed = !tasks[index].completed;
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function editTask(index) {
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            const newText = prompt("Edit your task:", tasks[index].text);
+            if (newText !== null) {
+                tasks[index].text = newText.trim();
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                renderTasks();
+            }
+        }
+
+        function deleteTask(index) {
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.splice(index, 1);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function checkTaskReminders() {
+            const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            const now = new Date();
+            tasks.forEach(task => {
+                if (task.dueDate && task.dueTime) {
+                    const taskTime = new Date(`${task.dueDate}T${task.dueTime}`);
+                    if (taskTime - now <= 5 * 60 * 1000 && taskTime > now) {
+                        if (Notification.permission === "granted") {
+                            new Notification("⏰ Reminder!", {
+                                body: `Task "${task.text}" is due soon!`,
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        function autoMarkCompleted() {
+            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            const now = new Date();
+            tasks.forEach((task, index) => {
+                if (task.dueDate && task.dueTime) {
+                    const taskTime = new Date(`${task.dueDate}T${task.dueTime}`);
+                    if (taskTime < now && !task.completed) {
+                        tasks[index].completed = true;
+                        setTimeout(() => {
+                            tasks.splice(index, 1);
+                            localStorage.setItem("tasks", JSON.stringify(tasks));
+                            renderTasks();
+                        }, 5000); // Delete after 5 seconds
+                    }
+                }
+            });
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            renderTasks();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: beige;
+            color: black;
+            flex-direction: column; 
+        }
+        h1 {
+            margin-bottom: 100px; 
+        }
+        .timer-container {
+            display: flex;
+            gap: 20px;
+        }
+        .circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: burlywood;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            border: 5px solid rgb(108, 49, 49);
+        }
+        .c {
+            margin-top: 20px;
+        }
+        input {
+            width: 60px;
+            height: 30px;
+            text-align: center;
+            font-size: 1rem;
+            margin: 5px;
+        }
+        button {
+            padding: 15px;
+            font-size: 1rem;
+            background: rgb(108, 49, 49);
+            border: none;
+            border-radius: 200px;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: rgb(185, 79, 79);
+        }
+        .back-button {
+            margin-top: 40px;
+            text-decoration: none;
+            padding: 15px 30px;
+            background: rgb(108, 49, 49);
+            color: white;
+            border-radius: 50px;
+            font-size: 1rem;
+        }
+        .back-button:hover {
+            background: rgb(185, 79, 79);
+        }
+    </style>
+</head>
+<body>
+    <h1>Time Waits for None!</h1>
+    <div class="timer-container">
+        <div class="circle" id="hours">00</div>
+        <div class="circle" id="minutes">00</div>
+        <div class="circle" id="seconds">00</div>
+    </div>
+
+    <div class="c">
+        <input type="number" id="h" placeholder="H" min="0">
+        <input type="number" id="m" placeholder="M" min="0" max="59">
+        <input type="number" id="s" placeholder="S" min="0" max="59">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="resetTimer()">Reset</button>
+    </div>
+
+    <a href="profile.html" class="back-button">BACK</a>
+
+    <script>
+        let totalSeconds = 0;
+        let interval;
+
+        function startTimer() {
+            const hours = parseInt(document.getElementById("h").value) || 0;
+            const minutes = parseInt(document.getElementById("m").value) || 0;
+            const seconds = parseInt(document.getElementById("s").value) || 0;
+            totalSeconds = hours * 3600 + minutes * 60 + seconds;
+
+            if (totalSeconds <= 0) {
+                alert("Please set a valid time.");
+                return;
+            }
+
+            clearInterval(interval);
+            interval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (totalSeconds <= 0) {
+                clearInterval(interval);
+                alert("Time's up!");
+                return;
+            }
+            totalSeconds--;
+
+            const hrs = Math.floor(totalSeconds / 3600);
+            const mins = Math.floor((totalSeconds % 3600) / 60);
+            const secs = totalSeconds % 60;
+
+            document.getElementById("hours").innerText = String(hrs).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(mins).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(secs).padStart(2, '0');
+        }
+
+        function resetTimer() {
+            clearInterval(interval);
+            document.getElementById("hours").innerText = "00";
+            document.getElementById("minutes").innerText = "00";
+            document.getElementById("seconds").innerText = "00";
+            document.getElementById("h").value = "";
+            document.getElementById("m").value = "";
+            document.getElementById("s").value = "";
+        }
+    </script>
+</body>
+</html>

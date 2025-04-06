@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: beige;
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            background-color: burlywood;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+
+        form h1,
+        h5 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: black;
+        }
+
+        form input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        form button {
+            background-color: rgb(108, 49, 49);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        form button:hover {
+            background-color: rgb(185, 79, 79);
+        }
+
+        form a {
+            color: brown;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="signupForm">
+        <h1>Register</h1>
+        <label for="first-name"></label><br>
+        <input type="text" placeholder="First name" required><br>
+
+        <label for="last-name"></label><br>
+        <input type="text" placeholder="Last name" required><br>
+
+        <label for="email"></label><br>
+        <input type="email" placeholder="Email" required><br>
+
+        <label for="password"></label><br>
+        <input type="password" placeholder="Password" required><br>
+
+        <label for="confirm-password"></label><br>
+        <input type="password" placeholder="Confirm Password" required><br><br>
+
+        <button type="submit">Submit</button>
+        <p>Already have an account?<a href="index.html"> Log in </a></p>
+    </form>
+
+    <script>
+        document.getElementById("signupForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+
+</html>

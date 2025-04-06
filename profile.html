@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TestPBL</title>
+  <style>
+    body {
+      display: flex;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+    .column1 {
+      width: 20%;
+      background-color: burlywood;
+      color: black;
+      padding: 20px;
+      box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+      height: 100vh;
+    }
+    .column1 h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid white;
+      padding-bottom: 10px;
+    }
+    .column1 a {
+      display: block;
+      color: rgb(108, 49, 49);
+      text-decoration: none;
+      font-size: 18px;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    .column1 a:hover {
+      background-color: rgb(232, 199, 157);
+    }
+    .column2 {
+      flex: 1;
+      position: relative;
+      padding: 20px;
+      background-color: #F5F5DC;
+    }
+    .wlcm {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 24px;
+      color: #333;
+      font-weight: bold;
+    }
+    .dateANDtime {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #fff;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+    }
+    .dateANDtime span {
+      display: block;
+      margin: 5px 0;
+    }
+    .quote-box {
+      margin: 300px auto;
+      padding: 20px;
+      width: 60%; 
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .motivation-heading {
+      font-size: 22px;
+      color: #444;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    .quote-box p {
+      font-size: 18px;
+      color: #333;
+    }
+    .quote-author {
+      margin-top: 10px;
+      font-size: 16px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="column1">
+    <h1>Contents</h1>
+    <!-- <a href="profile.html">👤 PROFILE</a> -->
+    <a href="calendar.html">📅 CALENDAR</a>
+    <!-- <a href="chat.html">💬 CHAT</a> -->
+    <a href="task.html">🎯 TASK</a>
+    <a href="timer.html">⏲️ TIMER</a>
+    <a href="quiz.html">📝 QUIZ</a>
+    <a href="settings.html">⚙️ AI</a>
+    <a href="#" onclick="logout()">🚪LOGOUT</a>
+  </div>
+
+  <div class="column2">
+    <div class="wlcm">Welcome!</div>
+    <div class="dateANDtime" id="dateANDtime">
+      <span id="date"></span>
+      <span id="time"></span>
+    </div>
+   
+    <div class="quote-box">
+      <h2 class="motivation-heading">A Moment of Motivation 💡</h2>
+      <p id="quote"></p>
+      <p id="author" class="quote-author"></p>
+    </div>
+  </div>
+
+  <script src="motivational.js"></script>
+  <script>
+    function setTime() {
+      const now = new Date();
+      const info = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      document.getElementById('date').innerText = now.toLocaleDateString('en-US', info);
+      document.getElementById('time').innerText = now.toLocaleTimeString();
+    }
+    setInterval(setTime, 1000);
+    setTime();
+
+    function logout() {
+      alert("Logging out...");
+      window.location.href = "logout.html";
+    }
+  </script>
+</body>
+</html>

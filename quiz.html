@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Trivia Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: beige;
+            color: black;
+            text-align: center;
+        }
+
+        h1 {
+            color: black;
+        }
+
+        #quiz-container {
+            margin: auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: burlywood;
+            border-radius: 10px;
+            box-shadow: 0 0 10px ;
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background-color:bisque;
+            color: black;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: rgb(228, 202, 171);
+        }
+
+        .option {
+            display: block;
+            margin: 5px;
+            padding: 10px;
+            background-color: bisque;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .back-button {
+            margin-top: 40px;
+            text-decoration: none;
+            padding: 15px 30px;
+            background: rgb(108, 49, 49);
+            color: white;
+            border-radius: 50px;
+            font-size: 1rem;
+        }
+
+        .correct {
+            background-color: green !important;
+        }
+
+        .wrong {
+            background-color: red !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>AI Trivia Quiz Game</h1>
+
+    <div id="quiz-container">
+        <label for="category">Category:</label>
+        <select id="category">
+            <option value="Science">Science</option>
+            <option value="History">History</option>
+            <option value="Math">Math</option>
+            <option value="Technology">Technology</option>
+            <option value="Geography">Geography</option>
+        </select>
+
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+
+        <button onclick="generateQuestion()">Generate Question</button>
+
+        <div id="question-container"></div>
+        <div id="options-container"></div>
+        <p id="result"></p>
+        <a href="profile.html" class="back-button">BACK</a>
+    </div>
+
+    <script>
+        const API_KEY = "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";
+        const askedQuestions = new Set();
+
+        async function generateQuestion() {
+            const category = document.getElementById("category").value;
+            const difficulty = document.getElementById("difficulty").value;
+            const questionContainer = document.getElementById("question-container");
+            const optionsContainer = document.getElementById("options-container");
+            const resultText = document.getElementById("result");
+
+            questionContainer.innerHTML = "Loading...";
+            optionsContainer.innerHTML = "";
+            resultText.innerHTML = "";
+
+            let retries = 5;
+
+            while (retries > 0) {
+                try {
+                    const data = await fetchTrivia(category, difficulty);
+                    if (data && isValidQuestion(data)) {
+                        if (askedQuestions.has(data.question)) {
+                            console.warn("Duplicate question, retrying...");
+                            retries--;
+                            continue;
+                        }
+                        askedQuestions.add(data.question);
+                        displayQuestion(data);
+                        return;
+                    }
+                } catch (error) {
+                    console.error("Error generating question:", error);
+                }
+                retries--;
+            }
+
+            questionContainer.innerHTML = "❌ Failed to generate a new question. Try again.";
+        }
+
+        async function fetchTrivia(category, difficulty) {
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${API_KEY}`,
+                },
+                body: JSON.stringify({
+                    model: "llama3-8b-8192",
+                    messages: [
+                        {
+                            role: "system",
+                            content: `Generate a unique trivia question for the '${category}' category with '${difficulty}' difficulty. 
+                            Return in this exact JSON format:
+                            {
+                              "question": "What is the capital of France?",
+                              "options": ["Paris", "London", "Berlin", "Madrid"],
+                              "answer": "Paris"
+                            }
+                            Ensure:
+                            1. The correct answer must be one of the options.
+                            2. Each question is unique.
+                            3. Avoid repetition of questions.`
+                        }
+                    ],
+                    max_tokens: 300
+                })
+            });
+
+            if (!response.ok) throw new Error(`API error: ${response.status}`);
+            const data = await response.json();
+            const content = data?.choices?.[0]?.message?.content;
+
+            try {
+                return JSON.parse(content);
+            } catch (err) {
+                console.error("Error parsing AI response:", err, content);
+                return null;
+            }
+        }
+
+        function isValidQuestion(data) {
+            return data && data.question && Array.isArray(data.options) && data.options.length === 4 && data.answer;
+        }
+
+        function displayQuestion(data) {
+            const { question, options, answer } = data;
+            const questionContainer = document.getElementById("question-container");
+            const optionsContainer = document.getElementById("options-container");
+            const resultText = document.getElementById("result");
+
+            questionContainer.innerHTML = `<h3>${question}</h3>`;
+            optionsContainer.innerHTML = "";
+
+            options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.className = "option";
+                btn.innerText = option;
+                btn.onclick = () => handleGuess(btn, option, answer);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleGuess(button, selectedOption, correctAnswer) {
+            const resultText = document.getElementById("result");
+            if (selectedOption === correctAnswer) {
+                button.classList.add("correct");
+                resultText.innerText = "🎉 Correct! Try another question.";
+                disableOptions();
+            } else {
+                button.classList.add("wrong");
+                resultText.innerText = "❌ Wrong! Try again.";
+                button.disabled = true;
+            }
+        }
+
+        function disableOptions() {
+            document.querySelectorAll(".option").forEach(button => {
+                button.disabled = true;
+            });
+        }
+    </script>
+
+</body>
+
+</html>
