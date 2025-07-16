@@ -17,6 +17,12 @@ All in one place — for an **efficient, personalized, and structured study expe
 
 ---
 
+## 🔗 Live Demo
+
+🌐 [Click here to try the live demo](https://shruti627.github.io/AI-Based-Virtual-Study-Planner/) 🚀
+
+---
+
 ## 🧩 Problem Statement
 
 > Staying focused is hard.  
@@ -67,7 +73,6 @@ We need something smarter — something that adapts to the **pace, style, and st
 
 **Shruti Parikshit Sangvikar**  
 👩‍🎓 Third-year Engineering Student  
-
 
 ---
 
