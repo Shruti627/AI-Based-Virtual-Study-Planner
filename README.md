@@ -1,46 +1,76 @@
-📚✨ AI-Based Virtual Study Planner
-In a world full of distractions and deadlines, staying focused feels… hard.
+# 📚✨ AI-Based Virtual Study Planner
+
+In a world full of distractions and deadlines, staying focused feels… hard.  
 We get it.
 
-That’s why we built the AI Virtual Study Planner —
-not just another planner, but a companion who understands your academic chaos and turns it into calm. 💡
+That’s why we built the **AI Virtual Study Planner** —  
+Not just another planner, but a **smart companion** who understands your academic chaos and turns it into calm. 💡
 
-Virtual Study Planner is a web-based platform designed to streamline learning and improve academic performance.
-It integrates AI-powered study recommendations, task management, a Pomodoro timer, and an AI-based quiz, ensuring an efficient and structured study experience.
+A **web-based platform** designed to streamline learning and enhance academic performance, it integrates:
 
-🧩 Problem Statement
-Staying focused is hard.
-Between deadlines, distractions, and burnout, students often feel lost in the chaos.
-Traditional planners don’t get it — they’re rigid, impersonal, and honestly... not enough.
+- 🎯 AI-powered study recommendations  
+- ⏳ Focus-enhancing tools like Pomodoro Timer  
+- 🧠 AI-generated quizzes & roadmaps  
+- ✅ Smart task and schedule management
 
-We need something smarter.
-Something powered by AI — that understands your pace, adapts to your needs, and gently guides you through the mess.
-A planner that doesn't just schedule your time, but supports your journey. 💔🤖📚
+All in one place — for an **efficient, personalized, and structured study experience**.
 
-🚀 Key Features
-📅 Smart Calendar
+---
 
-⏳ Built-in Focus Timer (Pomodoro style)
+## 🧩 Problem Statement
 
-🧑‍🏫 AI-powered Study Recommendations & Tips
+> Staying focused is hard.  
+> Between deadlines, distractions, and burnout, students often feel lost in the chaos.
 
-🎯 Task Manager
+Traditional planners are **rigid, impersonal, and insufficient**.  
+We need something smarter — something that adapts to the **pace, style, and struggles** of real students.
 
-🧘 Daily Motivational Quotes
+💔 We don't need just another to-do list.  
+🤖 We need a **planner that supports the journey** — that guides, motivates, and optimizes.  
+📚 We built **exactly that**.
 
-💬 AI-powered Quiz
+---
 
-🛤️ AI Roadmap Generator
+## 🚀 Key Features
 
-📝 AI Task Generator
+| Feature                       | Description                                              |
+|------------------------------|----------------------------------------------------------|
+| 📅 **Smart Calendar**         | Organize your study sessions and deadlines effectively   |
+| ⏳ **Focus Timer**            | Built-in Pomodoro-style timer to improve concentration   |
+| 🧑‍🏫 **AI Study Suggestions** | Personalized tips and methods based on your habits       |
+| 🎯 **Task Manager**           | Organize daily, weekly, or subject-wise tasks            |
+| 🧘 **Motivational Quotes**    | Fresh dose of inspiration every day                     |
+| 💬 **AI Quiz**                | Interactive quiz with explanation mode                  |
+| 🛤️ **AI Roadmap Generator**  | Custom learning paths based on goals                    |
+| 📝 **AI Task Generator**      | Auto-generate study tasks using AI                     |
 
-🔧 Tech Stack
-🖥️ HTML, CSS, JavaScript – For a responsive, clean, and intuitive UI
+---
 
-🤖 Large Language Model (LLM) Integration – For AI-driven features and smart suggestions
+## 🔧 Tech Stack
 
-✅ Conclusion
-Studying shouldn’t feel like a constant battle.
-With the power of AI, our Virtual Study Planner offers more than schedules —
-it offers support, structure, and a little peace in the chaos. 🌿📚
+| Tech                        | Role                                                   |
+|----------------------------|--------------------------------------------------------|
+| 🖥️ **HTML, CSS, JavaScript** | Responsive and user-friendly frontend interface         |
+| 🤖 **Large Language Model (LLM)** | Powers all AI features: suggestions, quizzes, tasks |
 
+---
+
+## ✅ Conclusion
+
+> Studying shouldn’t feel like a constant battle.  
+> With the power of AI, our Virtual Study Planner offers more than just schedules —  
+> It offers **support, structure, and peace in the chaos.** 🌿📚
+
+---
+
+## ✍️ Author
+
+**Shruti Parikshit Sangvikar**  
+👩‍🎓 Third-year Engineering Student  
+
+
+---
+
+## 📌 License
+
+This project is **open-source** and available for **personal** and **educational** use.
